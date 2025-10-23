@@ -1,15 +1,34 @@
-import { writeFile, appendFile } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
+import { list, put } from '@vercel/blob';
 
-const filePath = path.join(process.cwd(), 'data.csv');
+const FILE_NAME = 'data.txt';
 
 export async function POST(req) {
     const { text } = await req.json();
-    console.log("Received request to /api/save with text " + text);
+    const line = `"${text.replace(/"/g, '""')}"\n`
+    console.log("Received request to /api/save with text " + line);
+ 
+    const existing = await list();
+    const file = existing.blobs.find(b => b.pathname === FILE_NAME)
 
-    if (!existsSync(filePath)) await writeFile(filePath, 'text\n');
-    await appendFile(filePath, `"${text.replace(/"/g, '""')}"\n`);
+    let csvContent = 'text\n';
+    if (file) {
+        const url = file.downloadUrl ?? file.url
+        const res = await fetch(file.url);
+        if (!res.ok) throw new Error('Failed to fetch existing CSV: ${res.status}');
+        console.log("Found existing res " + res);
+        const existingText = await res.text();
+        console.log("Found existing text " + existingText);
+        csvContent = existingText;
+    }
 
-    return Response.json({ ok: true });
+    csvContent += line;
+    console.log("Saving new text " + csvContent);
+
+    await put(FILE_NAME, csvContent, {
+        contentType: 'text/plain',
+        access: 'public',
+        allowOverwrite: true,
+    });
+
+    return Response.json(JSON.stringify({ ok: true }), { status: 200 });
 }
