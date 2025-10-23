@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function Home() {
   const [text, setText] = useState("");
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     await fetch('/api/save', {
       method: 'POST',
