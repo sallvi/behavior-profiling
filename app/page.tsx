@@ -32,12 +32,13 @@ export default function Home() {
           />
           <input 
             value={password}
+            type="password"
             onChange={ e => 
               setPassword(e.target.value)
             }
             placeholder="Enter your password"
           />
-          <hr style={{margin: '2em 0'}} />
+          <hr style={{margin: '2em 0', borderColor: 'pink'}} />
           <button type="submit">Save</button>
         </form>
       </main>
