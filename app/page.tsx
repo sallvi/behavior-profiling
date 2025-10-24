@@ -55,6 +55,9 @@ export default function Home() {
   const [mouseData, setMouseData] = useState<MouseData[]>([]);
   const [keystrokeData, setKeystrokeData] = useState<KeystrokeData[]>([]);
   const [currentMouse, setCurrentMouse] = useState({ x: 0, y: 0 });
+  const [deviceFingerprint, setDeviceFingerprint] = useState<DeviceFingerprint | null>(null);
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  //
   const lastMouseData = useRef<MouseData | null>(null);
   const keyDownTimes = useRef<Map<string, number>>(new Map());
   const lastKeyUpTime = useRef<number>(0);
@@ -73,7 +76,12 @@ export default function Home() {
         mouseAverageAcceleration: getAverageAcceleration(),
         mouseTotalMovement: getTotalMovement(),
         averageDwellTime: getAverageDwellTime(),
-        averageTypingSpeed: getAverageTypingSpeed()
+        averageTypingSpeed: getAverageTypingSpeed(),
+        device: deviceFingerprint?.device.type,
+        browser: deviceFingerprint?.device.browser,
+        screenResolution: deviceFingerprint ? `${deviceFingerprint.screen.width}x${deviceFingerprint.screen.height}` : undefined,
+        windowSize: `${windowSize.width}x${windowSize.height}`,
+        timezone: deviceFingerprint?.timezone.name,
       }),
     })
     setUsername("");
@@ -159,6 +167,77 @@ export default function Home() {
     []
   );
 
+  const parseDeviceInfo = (userAgent: string) => {
+    const ua = userAgent.toLowerCase();
+
+    // Detect browser
+    let browser = "Unknown Browser";
+    if (ua.includes("chrome") && !ua.includes("edg") && !ua.includes("opr")) {
+      browser = "Google Chrome";
+    } else if (ua.includes("firefox")) {
+      browser = "Mozilla Firefox";
+    } else if (ua.includes("safari") && !ua.includes("chrome")) {
+      browser = "Safari";
+    } else if (ua.includes("edg")) {
+      browser = "Microsoft Edge";
+    } else if (ua.includes("opr") || ua.includes("opera")) {
+      browser = "Opera";
+    }
+
+    // Detect device type
+    let deviceType = "Desktop";
+    if (
+      ua.includes("mobile") ||
+      ua.includes("iphone") ||
+      ua.includes("android")
+    ) {
+      deviceType = "Mobile";
+    } else if (ua.includes("tablet") || ua.includes("ipad")) {
+      deviceType = "Tablet";
+    }
+
+    return {
+      type: deviceType,
+      browser,
+    };
+  };
+
+  const collectDeviceFingerprint = async (): Promise<DeviceFingerprint> => {
+    const screen = {
+      width: window.screen.width,
+      height: window.screen.height,
+      colorDepth: window.screen.colorDepth,
+      pixelRatio: window.devicePixelRatio,
+      availWidth: window.screen.availWidth,
+      availHeight: window.screen.availHeight,
+    };
+
+    const browser = {
+      userAgent: navigator.userAgent,
+      language: navigator.language,
+      languages: [...navigator.languages],
+      platform: navigator.platform,
+      cookieEnabled: navigator.cookieEnabled,
+      doNotTrack: navigator.doNotTrack,
+      hardwareConcurrency: navigator.hardwareConcurrency || 0,
+      maxTouchPoints: navigator.maxTouchPoints || 0,
+    };
+
+    const device = parseDeviceInfo(navigator.userAgent);
+
+    const timezone = {
+      offset: new Date().getTimezoneOffset(),
+      name: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    };
+
+    return {
+      screen,
+      browser,
+      device,
+      timezone,
+    };
+  };
+
   const getAverageVelocity = () => {
     if (mouseData.length === 0) return 0;
     const sum = mouseData.reduce((acc, data) => acc + data.velocity, 0);
@@ -191,24 +270,48 @@ export default function Home() {
     const sum = keystrokeData.reduce((acc, data) => acc + data.dwellTime, 0);
     return (sum / keystrokeData.length).toFixed(1);
   };
+
+  useEffect(() => {
+    const updateWindowSize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    // Set initial window size
+    updateWindowSize();
+
+    // Add resize listener
+    window.addEventListener("resize", updateWindowSize);
+
+    return () => {
+      window.removeEventListener("resize", updateWindowSize);
+    };
+  }, []);
   
   useEffect(() => {
+    async function initTracking() {
+      setMouseData([]);
+      setKeystrokeData([]);
+      lastMouseData.current = null;
+      keyDownTimes.current.clear();
+      lastKeyUpTime.current = 0;
+
+      try {
+        const [fingerprint] = await Promise.all([collectDeviceFingerprint()]);
+        setDeviceFingerprint(fingerprint);
+      } catch (error) {
+        console.error("Error collecting fingerprint:", error);
+      }
+    }
+
+    initTracking();
     setMouseData([]);
     setKeystrokeData([]);
     lastMouseData.current = null;
     keyDownTimes.current.clear();
     lastKeyUpTime.current = 0;
-
-    // // Collect device fingerprint and network info
-    // setIsCollectingFingerprint(true);
-    // try {
-    //   const [fingerprint] = await Promise.all([collectDeviceFingerprint()]);
-    //   setDeviceFingerprint(fingerprint);
-    // } catch (error) {
-    //   console.error("Error collecting fingerprint:", error);
-    // } finally {
-    //   setIsCollectingFingerprint(false);
-    // }
   }, []);
 
   // Set up event listeners for mouse/keyboard tracking
@@ -257,7 +360,7 @@ export default function Home() {
           </div>
         </form>
 
-        <div className="flex gap-2 justify-end mt-4">    
+        <div className="grid grid-cols-2 gap-8 mt-12 w-full text-sm">
           {/* Mouse Tracking Area */}
           <div className="space-y-3">
             <div className="text-sm space-y-1">
@@ -312,22 +415,41 @@ export default function Home() {
                 ms
               </div>
             </div>
-
-            {/* Recent keystroke timings */}
-            {/* {keystrokeData.length > 0 && (
-              <div className="h-80 overflow-y-auto bg-zinc-50 p-2 rounded-lg text-xs">
-                {keystrokeData
-                  .slice(-10)
-                  .reverse()
-                  .map((keystroke, index) => (
-                    <div key={index} className="flex justify-between">
-                      <span>&quot;{keystroke.key}&quot;</span>
-                      <span>{keystroke.dwellTime}ms</span>
-                    </div>
-                  ))}
-              </div>
-            )} */}
           </div>
+          {/* Device Fingerprinting */}
+          {deviceFingerprint && (
+            <div className="space-y-3">
+              {/* Screen Information */}
+              <div className="text-sm space-y-1">
+                <div>
+                  <span className="font-semibold">Device:</span>{" "}
+                  {deviceFingerprint.device.type}
+                </div>
+
+                <div>
+                  <span className="font-semibold">Browser:</span>{" "}
+                  {deviceFingerprint.device.browser}
+                </div>
+                <div>
+                  <span className="font-semibold">Resolution:</span>{" "}
+                  {deviceFingerprint.screen.width}×
+                  {deviceFingerprint.screen.height}
+                </div>
+                <div>
+                  <span className="font-semibold">Window Size:</span>{" "}
+                  {windowSize.width}×{windowSize.height}
+                </div>
+                <div>
+                  <span className="font-semibold">Timezone:</span>{" "}
+                  {deviceFingerprint.timezone.name}
+                </div>
+                <div>
+                  <span className="font-semibold">Language:</span>{" "}
+                  {deviceFingerprint.browser.language}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>
