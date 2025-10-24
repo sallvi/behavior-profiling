@@ -3,7 +3,8 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function Home() {
-  const [text, setText] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -12,9 +13,10 @@ export default function Home() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ username, password }),
     })
-    setText("");
+    setUsername("");
+    setPassword("");
   }
 
   return (
@@ -22,13 +24,21 @@ export default function Home() {
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <form onSubmit={handleSubmit}>
           <input 
-          value={text}
+          value={username}
           onChange={ e => 
-            setText(e.target.value)
+            setUsername(e.target.value)
           }
           placeholder="Enter your username"
           />
-          <hr style={{margin: '2em 0'}} />
+          <input 
+            value={password}
+            type="password"
+            onChange={ e => 
+              setPassword(e.target.value)
+            }
+            placeholder="Enter your password"
+          />
+          <hr style={{margin: '2em 0', borderColor: 'pink'}} />
           <button type="submit">Save</button>
         </form>
       </main>
