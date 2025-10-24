@@ -30,12 +30,18 @@ hr {
   border-top: 1px solid var(--foreground);
   margin: 2rem 0;
 }
-button {
+hr.disabled {
+  opacity: 0.5 !important;
+}
+button, input {
   border: 1px solid var(--foreground);
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
 }
-button:disabled {
+input {
+  margin: 0em 1em 1em 0em;
+}
+button:disabled, input:disabled {
   opacity: 0.5 !important;
   cursor: not-allowed;
 }
