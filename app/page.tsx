@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function Home() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [enabled, setEnabled] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -17,6 +18,10 @@ export default function Home() {
     })
     setUsername("");
     setPassword("");
+    setEnabled(false);
+  }
+  function isFormEmpty() {
+    return !username || !password;
   }
 
   return (
@@ -25,21 +30,31 @@ export default function Home() {
         <form onSubmit={handleSubmit}>
           <input 
           value={username}
-          onChange={ e => 
-            setUsername(e.target.value)
-          }
+          onChange={ e =>  setUsername(e.target.value) }
           placeholder="Enter your username"
           />
           <input 
             value={password}
             type="password"
-            onChange={ e => 
-              setPassword(e.target.value)
-            }
+            onChange={ e => setPassword(e.target.value) }
             placeholder="Enter your password"
           />
-          <hr style={{margin: '2em 0', borderColor: 'pink'}} />
-          <button type="submit">Save</button>
+          <hr/>
+          <div className="flex gap-2 justify-end mt-4">
+            <button
+              type="button"
+              onClick={() => setEnabled(true)}
+              disabled={enabled || isFormEmpty()}
+            >
+              Enable Save
+            </button>
+            <button 
+              type="submit" 
+              disabled={!enabled || isFormEmpty()}
+            >
+              Save
+            </button>
+          </div>
         </form>
       </main>
     </div>
