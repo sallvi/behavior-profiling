@@ -49,6 +49,7 @@ interface DeviceFingerprint {
 
 export default function Home() {
   const [username, setUsername] = useState("");
+  const [contract, setContract] = useState("");
   const [password, setPassword] = useState("");
   const [enabled, setEnabled] = useState(false);
 
@@ -71,6 +72,7 @@ export default function Home() {
       },
       body: JSON.stringify({
         username,
+        contract,
         password,
         mouseAverageVelocity: getAverageVelocity(),
         mouseAverageAcceleration: getAverageAcceleration(),
@@ -85,13 +87,17 @@ export default function Home() {
       }),
     })
     setUsername("");
+    setContract("");
     setPassword("");
     setMouseData([]);
     setKeystrokeData([]);
     setEnabled(false);
   }
   function isFormEmpty() {
-    return !username || !password;
+    return !username || !contract;
+  }
+  function isForm2Empty() {
+    return !password
   }
 
   // Mouse tracking with acceleration calculation
@@ -330,34 +336,48 @@ export default function Home() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+        <h1 className="text-4xl font-bold mb-8">Enter your fake login data</h1>
         <form onSubmit={handleSubmit}>
           <input 
           value={username}
           onChange={ e =>  setUsername(e.target.value) }
-          placeholder="Enter your username"
+          disabled={enabled}
+          placeholder="Your username"
           />
           <input 
-            value={password}
-            type="password"
-            onChange={ e => setPassword(e.target.value) }
-            placeholder="Enter your password"
+          value={contract}
+          onChange={ e =>  setContract(e.target.value) }
+          disabled={enabled}
+          placeholder="Your contract number"
           />
-          <hr/>
           <div className="flex gap-2 justify-end mt-4">
             <button
               type="button"
               onClick={() => setEnabled(true)}
               disabled={enabled || isFormEmpty()}
             >
-              Enable Save
-            </button>
-            <button 
-              type="submit" 
-              disabled={!enabled || isFormEmpty()}
-            >
-              Save
+              Continue
             </button>
           </div>
+          <hr className={enabled ? 'disabled' : ''} />
+          <div>
+            <input 
+            value={password}
+            type="password"
+            disabled={!enabled || isFormEmpty()}
+            onChange={ e => setPassword(e.target.value) }
+            placeholder="Your password"
+          />
+          </div>
+          <div className="flex gap-2 justify-end mt-4">
+            <button 
+              type="submit" 
+              disabled={!enabled || isFormEmpty() || isForm2Empty()}
+            >
+              Submit
+            </button>
+          </div>
+          <hr className={!enabled ? 'disabled' : ''} />
         </form>
 
         <div className="grid grid-cols-2 gap-8 mt-12 w-full text-sm">
