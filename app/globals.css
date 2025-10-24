@@ -36,6 +36,6 @@ button {
   padding: 0.5rem 1rem;
 }
 button:disabled {
-  opacity: 0.5;
+  opacity: 0.5 !important;
   cursor: not-allowed;
 }
