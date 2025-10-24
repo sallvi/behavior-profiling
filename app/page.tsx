@@ -7,6 +7,7 @@ interface MouseData {
   timestamp: number;
   velocity: number;
   acceleration: number;
+  totalDistance: number;
 }
 
 interface KeystrokeData {
@@ -70,6 +71,7 @@ export default function Home() {
         password,
         mouseAverageVelocity: getAverageVelocity(),
         mouseAverageAcceleration: getAverageAcceleration(),
+        mouseTotalMovement: getTotalMovement(),
         averageDwellTime: getAverageDwellTime(),
         averageTypingSpeed: getAverageTypingSpeed()
       }),
@@ -93,6 +95,7 @@ export default function Home() {
       const y = event.clientY
       let velocity = 0;
       let acceleration = 0;
+      let totalDistance = 0;
 
       if (lastMouseData.current) {
         const deltaTime = timestamp - lastMouseData.current.timestamp;
@@ -106,9 +109,10 @@ export default function Home() {
           deltaTime > 0
             ? ((velocity - lastMouseData.current.velocity) / deltaTime) * 1000
             : 0;
+        totalDistance = lastMouseData.current.totalDistance + distance;
       }
 
-      const newData: MouseData = { x, y, timestamp, velocity, acceleration };
+      const newData: MouseData = { x, y, timestamp, velocity, acceleration, totalDistance };
       lastMouseData.current = newData;
 
       setCurrentMouse({ x, y });
@@ -168,6 +172,11 @@ export default function Home() {
     );
     return (sum / mouseData.length).toFixed(2);
   };
+  const getTotalMovement = () => {
+    if (mouseData.length === 0) return 0;
+    const total = mouseData[mouseData.length - 1].totalDistance;
+    return total.toFixed(2);
+  }
   const getAverageTypingSpeed = () => {
     console.log(keystrokeData)
     if (keystrokeData.length < 2) return 0;
@@ -271,6 +280,15 @@ export default function Home() {
                 {getAverageAcceleration()}
               </span>{" "}
               px/s²
+            </div>
+            <div>
+              <span className="font-semibold">
+                Total Mouse Movement:
+              </span>{" "}
+              <span className="tabular-nums">
+                {getTotalMovement()}
+              </span>{" "}
+              px
             </div>
           </div>
         </div>

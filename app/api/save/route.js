@@ -1,7 +1,5 @@
 import { list, put } from '@vercel/blob';
 
-const FILE_NAME = 'data.2.txt';
-
 export async function POST(req) {
     function escapeCsvField(text) {
         return `"${String(text).replace(/"/g, '""')}"`;
@@ -10,6 +8,11 @@ export async function POST(req) {
     const line = Object.values(data).map(escapeCsvField).join(",") + "\n";
     console.log("Received request to /api/save with text " + line);
  
+    const now = new Date();
+    const day = now.toISOString().split('T')[0]; // e.g. "2025-10-24"
+    const hour = now.getHours().toString().padStart(2, '0'); // e.g. "07"
+    const FILE_NAME = `logs/data-${day}-${hour}.txt`;
+
     const existing = await list();
     const file = existing.blobs.find(b => b.pathname === FILE_NAME)
 
