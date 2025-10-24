@@ -258,76 +258,76 @@ export default function Home() {
         </form>
 
         <div className="flex gap-2 justify-end mt-4">    
-        {/* Mouse Tracking Area */}
-        <div className="space-y-3">
-          <div className="text-sm space-y-1">
-            <div>
-              <span className="font-semibold">Position:</span>{" "}
-              <span className=" tabular-nums">
-                ({currentMouse.x}, {currentMouse.y})
-              </span>
-            </div>
-            <div>
-              <span className="font-semibold">Avg Mouse Velocity:</span>{" "}
-              <span className="tabular-nums">{getAverageVelocity()}</span>{" "}
-              px/s
-            </div>
-            <div>
-              <span className="font-semibold">
-                Avg Mouse Acceleration:
-              </span>{" "}
-              <span className="tabular-nums">
-                {getAverageAcceleration()}
-              </span>{" "}
-              px/s²
-            </div>
-            <div>
-              <span className="font-semibold">
-                Total Mouse Movement:
-              </span>{" "}
-              <span className="tabular-nums">
-                {getTotalMovement()}
-              </span>{" "}
-              px
-            </div>
-          </div>
-        </div>
-        {/* Keystroke Analysis Debug */}
-        <div className="space-y-3">
-          <div className="text-sm space-y-1">
-            <div>
-              <span className="font-semibold">Typing Speed:</span> ~
-              <span className="tabular-nums">
-                {getAverageTypingSpeed()}
-              </span>{" "}
-              WPM
-            </div>
-            <div>
-              <span className="font-semibold">
-                Avg Keystroke Dwell Time:
-              </span>{" "}
-              <span className="tabular-nums">
-                {getAverageDwellTime()}
-              </span>
-              ms
+          {/* Mouse Tracking Area */}
+          <div className="space-y-3">
+            <div className="text-sm space-y-1">
+              <div>
+                <span className="font-semibold">Position:</span>{" "}
+                <span className=" tabular-nums">
+                  ({currentMouse.x}, {currentMouse.y})
+                </span>
+              </div>
+              <div>
+                <span className="font-semibold">Avg Mouse Velocity:</span>{" "}
+                <span className="tabular-nums">{getAverageVelocity()}</span>{" "}
+                px/s
+              </div>
+              <div>
+                <span className="font-semibold">
+                  Avg Mouse Acceleration:
+                </span>{" "}
+                <span className="tabular-nums">
+                  {getAverageAcceleration()}
+                </span>{" "}
+                px/s²
+              </div>
+              <div>
+                <span className="font-semibold">
+                  Total Mouse Movement:
+                </span>{" "}
+                <span className="tabular-nums">
+                  {getTotalMovement()}
+                </span>{" "}
+                px
+              </div>
             </div>
           </div>
+          {/* Keystroke Analysis Debug */}
+          <div className="space-y-3">
+            <div className="text-sm space-y-1">
+              <div>
+                <span className="font-semibold">Typing Speed:</span> ~
+                <span className="tabular-nums">
+                  {getAverageTypingSpeed()}
+                </span>{" "}
+                WPM
+              </div>
+              <div>
+                <span className="font-semibold">
+                  Avg Keystroke Dwell Time:
+                </span>{" "}
+                <span className="tabular-nums">
+                  {getAverageDwellTime()}
+                </span>
+                ms
+              </div>
+            </div>
 
-          {/* Recent keystroke timings */}
-          {/* {keystrokeData.length > 0 && (
-            <div className="h-80 overflow-y-auto bg-zinc-50 p-2 rounded-lg text-xs">
-              {keystrokeData
-                .slice(-10)
-                .reverse()
-                .map((keystroke, index) => (
-                  <div key={index} className="flex justify-between">
-                    <span>&quot;{keystroke.key}&quot;</span>
-                    <span>{keystroke.dwellTime}ms</span>
-                  </div>
-                ))}
-            </div>
-          )} */}
-        </div>
+            {/* Recent keystroke timings */}
+            {/* {keystrokeData.length > 0 && (
+              <div className="h-80 overflow-y-auto bg-zinc-50 p-2 rounded-lg text-xs">
+                {keystrokeData
+                  .slice(-10)
+                  .reverse()
+                  .map((keystroke, index) => (
+                    <div key={index} className="flex justify-between">
+                      <span>&quot;{keystroke.key}&quot;</span>
+                      <span>{keystroke.dwellTime}ms</span>
+                    </div>
+                  ))}
+              </div>
+            )} */}
+          </div>
         </div>
       </main>
     </div>
