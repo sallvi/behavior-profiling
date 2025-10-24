@@ -13,7 +13,7 @@ export async function POST(req) {
     let csvContent = 'text\n';
     if (file) {
         const url = file.downloadUrl ?? file.url
-        const res = await fetch(file.url);
+        const res = await fetch(file.url, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch existing CSV: ${res.status}');
         console.log("Found existing res " + res);
         const existingText = await res.text();
