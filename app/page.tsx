@@ -338,18 +338,24 @@ export default function Home() {
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <h1 className="text-4xl font-bold mb-8">Enter your fake login data</h1>
         <form onSubmit={handleSubmit}>
-          <input 
-          value={username}
-          onChange={ e =>  setUsername(e.target.value) }
-          disabled={enabled}
-          placeholder="Your username"
-          />
-          <input 
-          value={contract}
-          onChange={ e =>  setContract(e.target.value) }
-          disabled={enabled}
-          placeholder="Your contract number"
-          />
+          <div>
+            <input 
+            value={username}
+            onChange={ e =>  setUsername(e.target.value) }
+            disabled={enabled}
+            placeholder="Your username"
+            />
+            <small className="text-gray-500 text-xs">E.g. Fibonacci</small>
+          </div>
+          <div>
+            <input 
+            value={contract}
+            onChange={ e =>  setContract(e.target.value) }
+            disabled={enabled}
+            placeholder="Your contract number"
+            />
+            <small className="text-gray-500 text-xs">E.g. 112358</small>
+          </div>
           <div className="flex gap-2 justify-end mt-4">
             <button
               type="button"
@@ -361,13 +367,16 @@ export default function Home() {
           </div>
           <hr className={enabled ? 'disabled' : ''} />
           <div>
-            <input 
-            value={password}
-            type="password"
-            disabled={!enabled || isFormEmpty()}
-            onChange={ e => setPassword(e.target.value) }
-            placeholder="Your password"
-          />
+            <div>
+              <input 
+              value={password}
+              type="password"
+              disabled={!enabled || isFormEmpty()}
+              onChange={ e => setPassword(e.target.value) }
+              placeholder="Your password"
+              />
+              <small className="text-gray-500 text-xs">E.g. Fib1321#</small>
+            </div>
           </div>
           <div className="flex gap-2 justify-end mt-4">
             <button 
