@@ -53,7 +53,7 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [enabled, setEnabled] = useState(false);
   
-  const [sentData, setSentData] = useState("");
+  const [payload, setPayload] = useState("");
 
   const [mouseData, setMouseData] = useState<MouseData[]>([]);
   const [keystrokeData, setKeystrokeData] = useState<KeystrokeData[]>([]);
@@ -95,7 +95,7 @@ export default function Home() {
     setMouseData([]);
     setKeystrokeData([]);
     setEnabled(false);
-    setSentData(payload);
+    setPayload(payload);
   }
   function isFormEmpty() {
     return !username || !contract;
@@ -485,14 +485,13 @@ export default function Home() {
           )}
         </div>
         <div className="grid grid-cols-2 gap-8 mt-12 w-full text-sm">
-          {/* Sent Data Debug */}
-         {sentData && (
+          {/* Payload Debug */}
+         {payload && (
             <div className="space-y-3">
-              {/* Screen Information */}
               <div className="text-sm space-y-1">
                 <div>
-                  <span className="font-semibold">Sent Data:</span>{" "}
-                  {sentData}
+                  <span className="font-semibold">Payload:</span>{" "}
+                  {payload}
                 </div>
               </div>
             </div>
