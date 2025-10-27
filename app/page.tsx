@@ -52,6 +52,8 @@ export default function Home() {
   const [contract, setContract] = useState("");
   const [password, setPassword] = useState("");
   const [enabled, setEnabled] = useState(false);
+  
+  const [sentData, setSentData] = useState("");
 
   const [mouseData, setMouseData] = useState<MouseData[]>([]);
   const [keystrokeData, setKeystrokeData] = useState<KeystrokeData[]>([]);
@@ -65,12 +67,7 @@ export default function Home() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    await fetch('/api/save', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    let payload = JSON.stringify({
         username,
         contract,
         password,
@@ -84,7 +81,13 @@ export default function Home() {
         screenResolution: deviceFingerprint ? `${deviceFingerprint.screen.width}x${deviceFingerprint.screen.height}` : undefined,
         windowSize: `${windowSize.width}x${windowSize.height}`,
         timezone: deviceFingerprint?.timezone.name,
-      }),
+    })
+    await fetch('/api/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: payload,
     })
     setUsername("");
     setContract("");
@@ -92,6 +95,7 @@ export default function Home() {
     setMouseData([]);
     setKeystrokeData([]);
     setEnabled(false);
+    setSentData(payload);
   }
   function isFormEmpty() {
     return !username || !contract;
@@ -345,7 +349,7 @@ export default function Home() {
             disabled={enabled}
             placeholder="Your username"
             />
-            <small className="text-gray-500 text-xs">E.g. Fibonacci</small>
+            <small className="text-gray-500 text-xs">E.g. Leonardo</small>
           </div>
           <div>
             <input 
@@ -475,6 +479,20 @@ export default function Home() {
                 <div>
                   <span className="font-semibold">Language:</span>{" "}
                   {deviceFingerprint.browser.language}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="grid grid-cols-2 gap-8 mt-12 w-full text-sm">
+          {/* Sent Data Debug */}
+         {sentData && (
+            <div className="space-y-3">
+              {/* Screen Information */}
+              <div className="text-sm space-y-1">
+                <div>
+                  <span className="font-semibold">Sent Data:</span>{" "}
+                  {sentData}
                 </div>
               </div>
             </div>
