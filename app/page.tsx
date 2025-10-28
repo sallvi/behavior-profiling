@@ -286,9 +286,10 @@ export default function Home() {
     return (sum / keystrokeData.length).toFixed(1);
   };
   const getKeystrokes = () => {
-    if (!keystrokeData?.length) return '';
-    const json = JSON.stringify(keystrokeData);
-    return `'${json}'`; // wrap in single quotes, no extra escaping
+    if (!keystrokeData?.length) return '""'; // empty CSV cell
+    // escape inner quotes by doubling them
+    const json = JSON.stringify(keystrokeData).replace(/"/g, '""');
+    return `${json}`; // wrap in double quotes for CSV
   };
 
   useEffect(() => {
