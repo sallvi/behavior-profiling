@@ -286,7 +286,9 @@ export default function Home() {
     return (sum / keystrokeData.length).toFixed(1);
   };
   const getKeystrokes = () => {
-    return keystrokeData || [];
+    if (!keystrokeData?.length) return '""';
+    const json = JSON.stringify(keystrokeData);
+    return `"${json.replace(/"/g, '""')}"`; // escape inner quotes
   };
 
   useEffect(() => {
