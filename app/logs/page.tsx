@@ -1,4 +1,3 @@
-// app/logs/page.tsx
 import { list } from "@vercel/blob";
 
 type BlobEntry = {
