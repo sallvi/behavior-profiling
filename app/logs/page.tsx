@@ -35,19 +35,19 @@ export default async function LogsPage() {
 
   return (
   <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-        <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-          <h1 className="text-4xl font-bold mb-8">Payloads</h1>
+    <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+      <h1 className="text-4xl font-bold mb-8">Payloads</h1>
 
-        {files.length === 0 ? (
-          <p>No files found under <code>logs/</code>.</p>
-        ) : (
-          <div className="prose max-w-none">
-            <pre className="whitespace-pre-wrap bg-zinc-50 p-4 rounded">
-              {merged}
-            </pre>
-          </div>
-        )}
-      </main>
-    </div>
+      {files.length === 0 ? (
+        <p>No files found under <code>logs/</code>.</p>
+      ) : (
+        <div className="prose max-w-none">
+          <pre className="whitespace-pre-wrap bg-zinc-50 p-4 rounded">
+            {merged}
+          </pre>
+        </div>
+      )}
+    </main>
+  </div>
   );
 }
