@@ -10,8 +10,9 @@ export async function POST(req) {
  
     const now = new Date();
     const day = now.toISOString().split('T')[0]; // e.g. "2025-10-24"
-    const hour = now.getHours().toString().padStart(2, '0'); // e.g. "07"
-    const FILE_NAME = `logs/data-${day}-${hour}.txt`;
+    const hour = now.getHours().toString().padStart(2, '0');
+    const minute = now.getMinutes().toString().padStart(2, '0');
+    const FILE_NAME = `logs/data-${day}-${hour}-${minute}.txt`;
 
     const existing = await list();
     const file = existing.blobs.find(b => b.pathname === FILE_NAME)
