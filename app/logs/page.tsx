@@ -10,7 +10,7 @@ export default async function LogsPage() {
   // get all blobs and filter for "logs/" folder
   const existing = await list();
   const files: BlobEntry[] = (existing.blobs || []).filter((b: any) =>
-    String(b.pathname).startsWith("logs/")
+    String(b.pathname).startsWith("payloads/")
   );
 
   // optional: sort by pathname (or by name/date if you have that)
