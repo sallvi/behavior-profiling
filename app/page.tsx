@@ -452,6 +452,13 @@ export default function Home() {
                 ms
               </div>
             </div>
+          </div>    
+          {/* Keystroke Detail Analysis Debug */}
+          <div className="h-80 overflow-y-auto bg-zinc-50 p-2 rounded-lg text-xs">
+            <div className="font-semibold mb-2">Keystroke Detail (raw JSON)</div>
+            <pre className="whitespace-pre-wrap text-[11px]">
+              {JSON.stringify(keystrokeData.slice(-50), null, 2)}
+            </pre>
           </div>
           {/* Device Fingerprinting */}
           {deviceFingerprint && (
