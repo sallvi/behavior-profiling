@@ -452,13 +452,19 @@ export default function Home() {
                 ms
               </div>
             </div>
-          </div>    
-          {/* Keystroke Detail Analysis Debug */}
-          <div className="h-80 overflow-y-auto bg-zinc-50 p-2 rounded-lg text-xs">
-            <div className="font-semibold mb-2">Keystroke Detail (raw JSON)</div>
-            <pre className="whitespace-pre-wrap text-[11px]">
-              {JSON.stringify(keystrokeData.slice(-50), null, 2)}
-            </pre>
+          </div>
+          <div className="grid grid-cols-2 gap-8 mt-12 w-full text-sm">
+            {/* Keystroke Raw Analysis Debug */}
+            {keystrokeData && (
+              <div className="space-y-3">
+                <div className="text-sm space-y-1">
+                  <div>
+                    <span className="font-semibold">Keystroke Detail (raw):</span>{" "}
+                    {JSON.stringify(keystrokeData.slice(-50), null, 2)}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           {/* Device Fingerprinting */}
           {deviceFingerprint && (
@@ -497,7 +503,7 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-2 gap-8 mt-12 w-full text-sm">
           {/* Payload Debug */}
-         {payload && (
+          {payload && (
             <div className="space-y-3">
               <div className="text-sm space-y-1">
                 <div>
