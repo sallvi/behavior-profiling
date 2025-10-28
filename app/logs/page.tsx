@@ -17,6 +17,7 @@ export default async function LogsPage() {
   // optional: sort by pathname (or by name/date if you have that)
   files.sort((a, b) => a.pathname.localeCompare(b.pathname));
 
+  /*
   // fetch and merge contents (no cache)
   let merged = "";
   for (const file of files) {
@@ -31,7 +32,51 @@ export default async function LogsPage() {
     } catch (err: any) {
       merged += `\n\n--- ${file.pathname} (error) ---\n${String(err)}`;
     }
+  }*/
+
+
+  // fetch and merge contents (no cache), single header, no file separators
+  let header = "";
+  const rows: string[] = [];
+  for (const file of files) {
+    try {
+      const res = await fetch(file.url, { cache: "no-store" });
+      if (!res.ok) {
+        console.warn(`Failed to fetch ${file.pathname}: ${res.status}`);
+        continue;
+      }
+  
+      let text = await res.text();
+      // remove BOM if present
+      text = text.replace(/^\uFEFF/, "");
+  
+      // split into lines and trim blanks
+      const lines = text
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter((l) => l.length > 0);
+  
+      if (lines.length === 0) continue;
+  
+      // first line is header in each file; record header once
+      if (!header) {
+        header = lines[0];
+      }
+  
+      // push remaining lines (skip header)
+      const dataLines = lines.slice(1);
+      for (const ln of dataLines) {
+        // optional: skip duplicates (uncomment if desired)
+        // if (!rows.includes(ln)) rows.push(ln);
+        rows.push(ln);
+      }
+    } catch (err: any) {
+      console.warn(`Error fetching ${file.pathname}:`, err);
+    }
   }
+  // build merged text: one header + all rows (no extra newlines)
+  const merged = header ? `${header}\n${rows.join("\n")}` : rows.join("\n");
+  
 
   return (
   <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
