@@ -76,6 +76,7 @@ export default function Home() {
         mouseTotalMovement: getTotalMovement(),
         averageDwellTime: getAverageDwellTime(),
         averageTypingSpeed: getAverageTypingSpeed(),
+        keystrokes: getKeystrokes(),
         device: deviceFingerprint?.device.type,
         browser: deviceFingerprint?.device.browser,
         screenResolution: deviceFingerprint ? `${deviceFingerprint.screen.width}x${deviceFingerprint.screen.height}` : undefined,
@@ -283,6 +284,10 @@ export default function Home() {
     if (keystrokeData.length === 0) return 0;
     const sum = keystrokeData.reduce((acc, data) => acc + data.dwellTime, 0);
     return (sum / keystrokeData.length).toFixed(1);
+  };
+  const getKeystrokes = () => {
+    if (keystrokeData.length === 0) return "[]";
+    return JSON.stringify(keystrokeData, null, 2);
   };
 
   useEffect(() => {
