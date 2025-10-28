@@ -286,9 +286,8 @@ export default function Home() {
     return (sum / keystrokeData.length).toFixed(1);
   };
   const getKeystrokes = () => {
-    if (!keystrokeData?.length) return '""';
-    const json = JSON.stringify(keystrokeData);
-    return `"${json.replace(/"/g, '""')}"`; // escape inner quotes
+    if (!keystrokeData?.length) return '""'; // empty CSV cell
+    return `"${JSON.stringify(keystrokeData)}"`; // just wrap JSON in quotes
   };
 
   useEffect(() => {
