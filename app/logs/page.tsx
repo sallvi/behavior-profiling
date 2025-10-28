@@ -41,8 +41,8 @@ export default async function LogsPage() {
       {files.length === 0 ? (
         <p>No files found under <code>logs/</code>.</p>
       ) : (
-        <div className="prose max-w-none">
-          <pre className="whitespace-pre-wrap bg-zinc-50 p-4 rounded">
+        <div className="grid grid-cols-2 gap-8 mt-12 w-full text-sm">
+          <pre>
             {merged}
           </pre>
         </div>
