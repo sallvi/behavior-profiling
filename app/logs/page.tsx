@@ -83,7 +83,7 @@ export default async function LogsPage() {
       <h1 className="text-4xl font-bold mb-8">Payloads</h1>
 
       {files.length === 0 ? (
-        <p>No files found under <code>logs/</code>.</p>
+        <p>No files found under <code>payloads/</code>.</p>
       ) : (
         <div className="grid grid-cols-2 gap-8 mt-12 w-full text-sm">
           <pre>
