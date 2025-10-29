@@ -74,7 +74,7 @@ export default function Home() {
         mouseAverageVelocity: getAverageVelocity(),
         mouseAverageAcceleration: getAverageAcceleration(),
         mouseTotalMovement: getTotalMovement(),
-        mouseMovement: getMouseMovement(),
+        mouseTrace: getMouseTrace(),
         averageDwellTime: getAverageDwellTime(),
         averageTypingSpeed: getAverageTypingSpeed(),
         keystrokes: getKeystrokes(),
@@ -272,7 +272,7 @@ export default function Home() {
     const total = mouseData[mouseData.length - 1].totalDistance;
     return total.toFixed(2);
   }
-  const getMouseMovement = () => {
+  const getMouseTrace = () => {
     if (!mouseData?.length) return '""'; // empty CSV cell
     return `"${JSON.stringify(mouseData)}"`; // just wrap JSON in quotes
   };
