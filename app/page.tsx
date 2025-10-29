@@ -273,7 +273,7 @@ export default function Home() {
     return total.toFixed(2);
   }
   const getMouseTrace = () => {
-    if (!mouseData?.length) return '""'; // empty CSV cell
+    if (!mouseData?.length) return '"[]"'; // empty CSV cell
     return `"${JSON.stringify(mouseData)}"`; // just wrap JSON in quotes
   };
   const getAverageTypingSpeed = () => {
@@ -291,7 +291,7 @@ export default function Home() {
     return (sum / keystrokeData.length).toFixed(1);
   };
   const getKeystrokes = () => {
-    if (!keystrokeData?.length) return '""'; // empty CSV cell
+    if (!keystrokeData?.length) return '"[]"'; // empty CSV cell
     return `"${JSON.stringify(keystrokeData)}"`; // just wrap JSON in quotes
   };
 
