@@ -388,7 +388,6 @@ export default function Home() {
             <div>
               <input 
               value={password}
-              type="password"
               disabled={!enabled || isFormEmpty()}
               onChange={ e => setPassword(e.target.value) }
               placeholder="Your password"
