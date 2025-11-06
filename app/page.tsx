@@ -51,6 +51,7 @@ export default function Home() {
   const [username, setUsername] = useState("");
   const [contract, setContract] = useState("");
   const [password, setPassword] = useState("");
+  const [type, setType] = useState("");
   const [enabled, setEnabled] = useState(false);
   
   const [payload, setPayload] = useState("");
@@ -83,6 +84,7 @@ export default function Home() {
         screenResolution: deviceFingerprint ? `${deviceFingerprint.screen.width}x${deviceFingerprint.screen.height}` : undefined,
         windowSize: `${windowSize.width}x${windowSize.height}`,
         timezone: deviceFingerprint?.timezone.name,
+        type
     })
     await fetch('/api/save', {
       method: 'POST',
@@ -107,7 +109,7 @@ export default function Home() {
     return !username || !contract;
   }
   function isForm2Empty() {
-    return !password
+    return !password || type === "";
   }
 
   // Mouse tracking with acceleration calculation
@@ -395,6 +397,30 @@ export default function Home() {
               <small className="text-gray-500 text-xs">E.g. Fib1321#</small>
             </div>
           </div>
+          <div className="mt-4">
+          <div className="flex gap-4">
+            <label>
+              <input
+                type="radio"
+                name="type"
+                value="real"
+                disabled={!enabled || isFormEmpty()}
+                onChange={ e => setType(e.target.value) }
+              />
+              Real
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="type"
+                value="fake"
+                disabled={!enabled || isFormEmpty()}
+                onChange={ e => setType(e.target.value) }
+              />
+              Fake
+            </label>
+          </div>
+        </div>
           <div className="flex gap-2 justify-end mt-4">
             <button 
               type="submit" 
