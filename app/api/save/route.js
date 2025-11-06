@@ -13,7 +13,7 @@ export async function POST(req) {
     const hour = now.getHours().toString().padStart(2, '0');
     const minute = now.getMinutes().toString().padStart(2, '0');
     const second = now.getSeconds().toString().padStart(2, '0');
-    const FILE_NAME = `logins/data-${day}-${hour}-${minute}-${second}.txt`;
+    const FILE_NAME = `payloads/data-${day}-${hour}-${minute}-${second}.txt`;
 
     const existing = await list();
     const file = existing.blobs.find(b => b.pathname === FILE_NAME)
