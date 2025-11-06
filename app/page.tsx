@@ -65,7 +65,7 @@ export default function Home() {
   const keyDownTimes = useRef<Map<string, number>>(new Map());
   const lastKeyUpTime = useRef<number>(0);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     let payload = {
@@ -120,7 +120,7 @@ export default function Home() {
     return !username || !contract;
   }
   function isForm2Empty() {
-    return !password;
+    return !password
   }
 
   // Mouse tracking with acceleration calculation
