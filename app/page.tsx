@@ -86,7 +86,7 @@ export default function Home() {
       timezone: deviceFingerprint?.timezone.name,
     };
 
-    if (window.confirm("Cancel -> Fake ->\nOK -> Real")) {
+    if (window.confirm("Cancel -> Fake\nOK -> Real")) {
       await uploadPayload(payload, "real");
     }
     else {
